@@ -17,6 +17,14 @@ RSpec.configure do |config|
 
   config.include ActiveSupport::Testing::TimeHelpers
 
+  config.before(:each, type: :request) do
+    config.include Warden::Test::Helpers
+  end
+
+  config.after(:each, type: :request) do
+    Warden.test_reset!
+  end
+
   config.before(:each, type: :system) do
     config.include Warden::Test::Helpers
     Capybara.server = :puma, { Silent: true }

@@ -13,9 +13,12 @@ class UpgradeController < AuthenticatedController
 
   def create
     stripe_source_id = params[:stripe_source_id]
+    head :bad_request and return unless stripe_source_id
+
     upgrade = UserUpgrade.new(current_user, stripe_source_id)
     upgrade.process
-    render json: upgrade
+    status = upgrade.error.nil? ? :created : :ok
+    render json: upgrade, status: status
   end
 
   private
