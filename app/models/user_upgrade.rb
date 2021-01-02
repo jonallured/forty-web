@@ -15,8 +15,8 @@ class UserUpgrade
     update_user
     create_stripe_subscription
     subscribe_user
-  rescue Stripe::CardError => e
-    @error = e.error.message
+  rescue StripeClient::CardError => e
+    @error = e.message
   end
 
   def as_json(*_args)
@@ -34,7 +34,7 @@ class UserUpgrade
       source: @stripe_source_id
     }
 
-    @stripe_customer = Stripe::Customer.create(customer_attrs)
+    @stripe_customer = StripeClient.create_customer(customer_attrs)
   end
 
   def update_user
@@ -53,7 +53,7 @@ class UserUpgrade
       ]
     }
 
-    @stripe_subscription = Stripe::Subscription.create(sub_attrs)
+    @stripe_subscription = StripeClient.create_subscription(sub_attrs)
   end
 
   def subscribe_user
