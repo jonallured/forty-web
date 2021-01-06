@@ -30,6 +30,7 @@ export const InnerForm: React.FC<InnerFormProps> = (props) => {
   }
 
   const handleSourceResult = (result): void => {
+    console.log(result)
     if (result.error) {
       honeybadger.notify(result)
       setErrorMessage(generalPaymentErrorMessage)
