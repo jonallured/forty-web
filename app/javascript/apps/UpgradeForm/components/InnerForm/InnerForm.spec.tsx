@@ -42,6 +42,7 @@ describe("InnerForm", () => {
       await act(async () => {
         wrapper.find("form").prop("onSubmit")({ preventDefault: jest.fn() })
       })
+
       expect(props.fetcher.createUpgrade).toHaveBeenCalled()
     })
   })

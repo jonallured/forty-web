@@ -35,6 +35,9 @@ export const InnerForm: React.FC<InnerFormProps> = (props) => {
       honeybadger.notify(result)
       setErrorMessage(generalPaymentErrorMessage)
     } else {
+      // i can't currently figure out why this callback isn't being called or
+      // maybe it's just an async thing with my test setup? need to explore
+      // this next.
       fetcher
         .createUpgrade(result.source.id)
         .then(handleUpgradeResult)
