@@ -1,20 +1,19 @@
 import React, { useState } from "react"
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { UpgradeFormFetcher } from "../../UpgradeFormFetcher"
+import { SourceResult } from "../../UpgradeForm"
 
 const generalPaymentErrorMessage =
   "Processing payment information is currently not working, please try again later."
 
 export interface InnerFormProps {
-  email: string
+  createSource: () => SourceResult
+  disabled: boolean
   fetcher: UpgradeFormFetcher
   honeybadger: { notify: (any) => void }
 }
 
 export const InnerForm: React.FC<InnerFormProps> = (props) => {
-  const { email, honeybadger, fetcher } = props
-  const stripe = useStripe()
-  const elements = useElements()
+  const { createSource, disabled, fetcher, honeybadger } = props
   const [errorMessage, setErrorMessage] = useState("")
 
   const handleUpgradeResult = (result): void => {
@@ -51,24 +50,7 @@ export const InnerForm: React.FC<InnerFormProps> = (props) => {
     e.preventDefault()
     setErrorMessage("")
 
-    const element = elements.getElement(CardElement)
-    const sourceData = { type: "card", owner: { email } }
-
-    stripe
-      .createSource(element, sourceData)
-      .then(handleSourceResult)
-      .catch(handleSourceError)
-  }
-
-  const cardStyles = {
-    fontSize: "20px",
-  }
-
-  const cardElementOptions = {
-    style: {
-      base: cardStyles,
-    },
-    hideIcon: true,
+    createSource().then(handleSourceResult).catch(handleSourceError)
   }
 
   const showError = errorMessage !== ""
@@ -76,8 +58,8 @@ export const InnerForm: React.FC<InnerFormProps> = (props) => {
   return (
     <form onSubmit={handleSubmit}>
       {showError && <p className="error">{errorMessage}</p>}
-      <CardElement options={cardElementOptions} />
-      <input disabled={!stripe} type="submit" value="Pay" />
+      {props.children}
+      <input disabled={disabled} type="submit" value="Pay" />
     </form>
   )
 }
