@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { UpgradeFormFetcher } from "../../UpgradeFormFetcher"
 
-const generalPaymentErrorMessage =
+export const generalPaymentErrorMessage =
   "Processing payment information is currently not working, please try again later."
 
 export interface InnerFormProps {
